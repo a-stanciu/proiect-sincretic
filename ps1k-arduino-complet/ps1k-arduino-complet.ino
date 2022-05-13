@@ -23,8 +23,8 @@ void setup() {
 	pinMode(sensorDistancePin, INPUT);
 	Serial.begin(9600);
 	motor.setSpeed(255);
-	motor.run(RELEASE);
 	actionareMotor(FORWARD);
+	motor.run(RELEASE);
 	mlx.begin();
 }
 
@@ -45,14 +45,19 @@ void loop() {
 	
 			if (temp < 33) {
 				Serial.println("Usa se deschide");
+				digitalWrite(ledVerde, HIGH);
 				actionareMotor(BACKWARD);
 				deschis = true;
 			} else {
 				Serial.println("Temperatura prea mare!!");
+				digitalWrite(ledRosu, HIGH);
 				delay(5000);
+				digitalWrite(ledRosu, LOW);
 			}
 		} else {
 			Serial.println("Apropiati-va");
+			digitalWrite(ledVerde, LOW);
+			digitalWrite(ledRosu, LOW);
 		}
 	} else {
 		Serial.println("Usa deschisa");
@@ -60,6 +65,7 @@ void loop() {
 		deschis = false;
 		Serial.println("Usa se inchide");
 		actionareMotor(FORWARD);
+		digitalWrite(ledVerde, LOW);
 	}
 
 	Serial.println();
