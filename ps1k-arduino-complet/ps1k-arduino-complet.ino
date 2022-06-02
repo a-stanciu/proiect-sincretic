@@ -2,13 +2,15 @@
 #include <Adafruit_MLX90614.h>
 #include <AFMotor.h>
 
+int buton = A0;
 int sensorDistancePin = A1;
+int ledVerde = A2;
+int ledRosu = A3;
+
 int sensorDistanceValue = 0;
 int distance = 0;
 int temp = 0;
 bool deschis = false;
-int ledVerde = A2;
-int ledRosu = A3;
 Adafruit_MLX90614 mlx = Adafruit_MLX90614();
 AF_DCMotor motor(1);
 
@@ -48,6 +50,18 @@ void loop() {
 				digitalWrite(ledVerde, HIGH);
 				actionareMotor(BACKWARD);
 				deschis = true;
+				delay(5000);
+				actionareMotor(FORWARD);
+				deschis = false;
+				Serial.println("Usa blocata, apasati buton.");
+				while (true) {
+					if (analogRead(buton) == 1023) {
+						actionareMotor(BACKWARD);
+						delay(2000);
+						break;
+					}
+				}
+				actionareMotor(FORWARD);
 			} else {
 				Serial.println("Temperatura prea mare!!");
 				digitalWrite(ledRosu, HIGH);
